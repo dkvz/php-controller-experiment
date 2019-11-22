@@ -6,6 +6,7 @@ class ControllerBase {
   private $toCall = null;
   private $args = null;
   private $httpMethod = null;
+  private $baseValue;
 
   public function __construct(array $urlParams, string $httpMethod = 'GET') {
     // Get the first element of $urlParams to
@@ -19,6 +20,7 @@ class ControllerBase {
       $methodName = array_keys($urlParams)[0];
       if (method_exists($this, $methodName)) {
         $this->toCall = $methodName;
+        $this->baseValue = $urlParams[$methodName];
         // Will be an empty array if $urlParams doesn't have
         // more elements:
         $this->args = array_slice($urlParams, 1); 
@@ -32,7 +34,7 @@ class ControllerBase {
   }
 
   public function execute() {
-    $this->{$this->toCall}($this->args, $this->httpMethod);
+    $this->{$this->toCall}($this->args, $this->httpMethod, $this->baseValue);
   }
 
 }
