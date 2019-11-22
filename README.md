@@ -5,3 +5,4 @@ It currently gets extremely ugly if your API controller does a few different thi
 
 # TODO
 - Add namespaces
+- Add a method to the base class that gets the request body through php://input, and another one that does it as JSON
