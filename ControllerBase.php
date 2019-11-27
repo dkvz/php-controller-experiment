@@ -20,10 +20,19 @@ abstract class ControllerBase {
         // compatible.
         // This whole thing works because Associative
         // arrays have a set order in PHP.
-        $methodName = array_keys($urlParams)[0];
+        $originalMethodName = array_keys($urlParams)[0];
+        $methodName = preg_replace_callback(
+          '/[\W_]+([^\W_])?/',
+          function($matches) {
+            if (count($matches) > 1) {
+              return strtoupper($matches[1]);
+            }
+          },
+          $originalMethodName
+        );
         if (in_array($methodName, $endpoints) && method_exists($this, $methodName)) {
           $this->toCall = $methodName;
-          $this->baseValue = $urlParams[$methodName];
+          $this->baseValue = $urlParams[$originalMethodName];
           // Will be an empty array if $urlParams doesn't have
           // more elements:
           $this->args = array_slice($urlParams, 1); 
